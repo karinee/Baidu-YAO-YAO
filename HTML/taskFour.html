@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>听指令的小方块</title>
+</head>
+<style>
+
+    body{
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        margin: 0px 0px;
+        padding: 0px 0px;
+    }
+    #father{
+        display: flex;
+        height:100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+    #goBoard{
+        text-align: center;
+    }
+    table{
+        border-spacing: 0px 0px;
+        text-align: center;
+        font-weight: bold;
+    }
+    td{
+        position: relative;
+        width: 50px;
+        height: 50px;
+        border: 1px solid #808080;
+    }
+    tr td:first-child{
+        border:none;
+    }
+    .show{
+        background-color: #ff0000;
+    }
+    .top{
+        position: absolute;
+        top:0px;
+        right:-1px;
+        left:0px;
+        border: 5px solid #0000ff;
+    }
+    .right{
+        position: absolute;
+        top:0px;
+        right:-1px;
+        bottom:-1px;
+        border: 5px solid #0000ff;
+    }
+    .bottom{
+        position: absolute;
+        right:-1px;
+        bottom:-1px;
+        left:0px;
+        border: 5px solid #0000ff;
+    }
+    .left{
+        position: absolute;
+        top:0px;
+        left:0px;
+        bottom:0px;
+        border: 5px solid #0000ff;
+    }
+</style>
+<body>
+<div id="father">
+    <div id="goBoard">
+        <table>
+            <tr>
+               <th></th>
+               <th>1</th>
+               <th>2</th>
+               <th>3</th>
+               <th>4</th>
+               <th>5</th>
+               <th>6</th>
+               <th>7</th>
+               <th>8</th>
+               <th>9</th>
+               <th>10</th>
+           </tr>
+            <tr><td>1</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>2</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>3</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>4</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>5</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>6</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>7</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>8</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>9</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+            <tr><td>10</td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td><td><span></span></td></tr>
+        </table>
+        <button type="button" id="goLeft">LEFT</button>
+        <button type="button" id="goRight">RIGHT</button>
+        <button type="button" id="goBack">BACK</button>
+        <button type="button" id="go">GO</button>
+    </div>
+</div>
+<script>
+    var start = document.getElementById("start");
+    var goLeft = document.getElementById("goLeft");
+    var goRight = document.getElementById("goRight");
+    var goBack = document.getElementById("goBack");
+    var go = document.getElementById("go");
+    var rows = document.querySelectorAll("tr");
+    //初始状态
+    var current = rows[5].childNodes[5];
+    var directSpan = current.firstElementChild;
+    current.className = "show";
+    directSpan.className = "top";
+    //执行函数
+    function move(obj){
+        switch(obj.direction){
+            case "left":
+                if(obj.y>1){
+                    obj.y--;
+                    return {x:obj.x,y:obj.y,direction:"left"};
+                }
+                else{
+                    alert("超出范围，请走其他路!");
+                    return {x:obj.x,y:obj.y,direction:"left"};
+                }
+                break;
+            case "right":
+                if(obj.y<10){
+                    obj.y++;
+                    return {x:obj.x,y:obj.y,direction:"right"};
+                }
+                else{
+                    alert("超出范围，请走其他路!");
+                    return {x:obj.x,y:obj.y,direction:"right"};
+                }
+                break;
+            case "top":
+                if(obj.x>1){
+                    obj.x--;
+                    return {x:obj.x,y:obj.y,direction:"top"};
+                }
+                else{
+                    alert("超出范围，请走其他路!");
+                    return {x:obj.x,y:obj.y,direction:"top"};
+                }
+                break;
+            case "bottom":
+                if(obj.x<10){
+                    obj.x++;
+                    return {x:obj.x,y:obj.y,direction:"bottom"};
+                }
+                else{
+                    alert("超出范围，请走其他路!");
+                    return {x:obj.x,y:obj.y,direction:"bottom"};
+                }
+                break;
+        }
+    }
+    //转方向
+    function changeDirection(direction,aim){
+        var turn;
+        switch(direction){
+            case "left":
+                if(aim == "right"){
+                    turn = "top";
+                    return turn;
+                }
+                else if(aim == "left"){
+                    turn = "bottom";
+                    return turn;
+                }
+                else if(aim == "back"){
+                    turn = "right";
+                    return turn;
+                }
+            case "right":
+                if(aim == "right"){
+                    turn = "bottom";
+                    return turn;
+                }
+                else if(aim == "left"){
+                    turn = "top";
+                    return turn;
+                }
+                else if(aim == "back"){
+                    turn = "left";
+                    return turn;
+                }
+            case "top":
+                if(aim == "right"){
+                    turn = "right";
+                    return turn;
+                }
+                else if(aim == "left"){
+                    turn = "left";
+                    return turn;
+                }
+                else if(aim == "back"){
+                    turn = "bottom";
+                    return turn;
+                }
+            case "bottom":
+                if(aim == "right"){
+                    turn = "left";
+                    return turn;
+                }
+                else if(aim == "left"){
+                    turn = "right";
+                    return turn;
+                }
+                else if(aim == "back"){
+                    turn = "top";
+                    return turn;
+                }
+
+        }
+    }
+    goLeft.onclick = function(){
+        directSpan.className = changeDirection(directSpan.className,"left");
+    }
+    goRight.onclick = function(){
+        directSpan.className = changeDirection(directSpan.className,"right");
+    }
+    goBack.onclick = function(){
+        directSpan.className = changeDirection(directSpan.className,"back");
+    }
+    go.onclick = function(){
+        var currentObj = {x:current.parentNode.childNodes[0].innerHTML,y:[].indexOf.call(current.parentNode.childNodes,current),direction:directSpan.className};
+        current.className="";
+        directSpan.className ="";
+        var TurnToObj = move(currentObj);
+        current = rows[TurnToObj.x].childNodes[TurnToObj.y];
+        current.className = "show";
+        directSpan = current.firstElementChild;
+        directSpan.className = TurnToObj.direction;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单个表单项的检验</title>
+    <style>
+        body{
+            margin: 0px 0px;
+            padding: 0px 0px;
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        li{
+            position: relative;
+            list-style: none;
+            margin-bottom: 50px;
+        }
+        span{
+            font-size: 18px;
+            color: #808080;
+        }
+        label{
+            margin-right:20px;
+        }
+        button{
+            position: absolute;
+            top:5px;
+            margin-left:340px;
+            background-color: #4169e1;
+            color:#ffffff;
+            width:60px;
+            height:30px;
+            border: 1px solid #4169e1;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        div{
+            position: absolute;
+            top: -3px;
+            left: 80px;
+            width: 300px;
+        }
+        input{
+            border: 2px solid #808080;
+            outline: none;
+            border-radius: 5px;
+            width: inherit;
+            height:25px;
+        }
+        .inputright{
+            border-color: #32cd32;
+        }
+        .spanright{
+            color: #32cd32;
+        }
+        .inputwrong{
+            border-color: #ff0000;
+        }
+        .spanwrong{
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <ul>
+            <li>
+                <label for name="name">名称</label>
+                <div>
+                    <input type="text" id="name"/>
+                    <span>必填，长度为4-16个字符</span>
+                </div>
+                <button type="button" id="check1">验证</button>
+            </li>
+            <li>
+                <label for name="school">学校</label>
+                <div>
+                    <input type="text" id="school"/>
+                    <span></span>
+                </div>
+                <button type="button" id="check2">验证</button>
+            </li>
+            <li>
+                <label for name="profession">专业</label>
+                <div>
+                    <input type="text" id="profession"/>
+                    <span></span>
+                </div>
+                <button type="button" id="check3">验证</button>
+            </li>
+        </ul>
+    </form>
+</body>
+<script>
+    var check1 = document.getElementById("check1");
+    var check2 = document.getElementById("check2");
+    var check3= document.getElementById("check3");
+    check1.onclick = function(){
+        var name = document.getElementById("name");
+        checkFormat(name,"name");
+    };
+    check2.onclick = function(){
+        var school = document.getElementById("school");
+        checkFormat(school,"len");
+    };
+    check3.addEventListener("click",function(){
+        var pro = document.getElementById("profession");
+        checkFormat(pro,"pro");
+    },false);
+
+    function checkFormat(obj,type){
+        var lenReg = /^.{4,16}/g,
+            trimReg =/^\s*|\s*$/g,
+            chineseReg = /[\u4E00-\uFA29]|[\uE7C7-\uE7F3]/g,
+            formatReg=/.*专业$/g,
+            str = obj.value;
+        if(type ==="name" && str.replace(trimReg,'').length===0) {
+            obj.className = "inputwrong";
+            obj.nextElementSibling.className = "spanwrong";
+            obj.nextElementSibling.innerHTML = "该项不能为空";
+        }
+        else if(type ==="len" && !lenReg.test(str.replace(chineseReg,'**'))){
+            obj.className = "inputwrong";
+            obj.nextElementSibling.className= "spanwrong";
+            obj.nextElementSibling.innerHTML = "字符只能为4-16个";
+        }
+        else if(type ==="pro"&& !formatReg.test(str)){
+            obj.className = "inputwrong";
+            obj.nextElementSibling.className = "spanwrong";
+            obj.nextElementSibling.innerText = "专业格式错误";
+        }
+        else{
+            obj.className = "inputright";
+            obj.nextElementSibling.className= "spanright";
+            obj.nextElementSibling.innerHTML = "格式正确";
+        }
+    }
+</script>
+</html>

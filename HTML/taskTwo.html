@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多个表单项动态验证</title>
+    <style>
+        body{
+            margin: 0px 0px;
+            padding: 0px 0px;
+            text-decoration: none;
+        }
+        table{
+            margin: 10px auto;
+            border-spacing:10px;
+        }
+        td{
+            position: relative;
+        }
+        td:first-of-type{
+            font-size:25px;
+            color:#000000;
+            vertical-align: top;
+        }
+        input{
+            width: 300px;
+            height: 50px;
+            border: 1px solid #808080;
+            border-radius: 5px;
+        }
+        p{
+            height:20px;
+            font-size: 18px;
+        }
+        .tip{
+            color: #808080;
+        }
+        .wrongInput,.wrongTip{
+            color:#ff0000;
+        }
+        .rightInput,.rightTip{
+            color:#32cd32;
+        }
+        button{
+            position: absolute;
+            right:0px;
+            width: 80px;
+            height: 30px;
+            color: #ffffff;
+            font-size: 15px;
+            background-color: #4169e1;
+            border: 1px solid #4169e1;
+        }
+    </style>
+</head>
+<body>
+<form>
+    <table>
+        <tr>
+            <td>姓名</td>
+            <td>
+                <input type="text" id="name"/>
+                <p></p>
+            </td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td>
+                <input type="password" id="password1"/>
+                <p></p>
+            </td>
+        </tr>
+        <tr>
+            <td>密码确认</td>
+            <td>
+                <input type="password" id="password2"/>
+                <p></p>
+            </td>
+        </tr>
+        <tr>
+            <td>邮箱</td>
+            <td>
+                <input type="email" id="email"/>
+                <p></p>
+            </td>
+        </tr>
+        <tr>
+            <td>手机</td>
+            <td>
+                <input type="telephone" id="tel"/>
+                <p></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><button type="button" id="submit">提交</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+<script>
+    var inputs = document.getElementsByTagName("input");
+    var submitButton = document.getElementById("submit");
+    var signal = 0;
+    var lenReg= /^\S{4,16}$/g,
+        trimReg= /^\s|\s$/g,
+        emailReg=/^([0-9a-zA-Z_\-])+@([0-9a-zA-Z_\-])+\.([0-9a-zA-Z_\-])+$/,
+        telReg=/^((13[0-9])|(14[5|7])|(15([0-3|5-9]))|(18([0-3|5-9])))\d{8}$/,
+        passwordReg = /^.*(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])+(?=.*\S)+.*$/;
+
+    for(var i=0;i<inputs.length;i++){
+        let obj = inputs[i];
+        //获得焦点时提示
+        obj.onfocus = function(){
+            var p = obj.nextElementSibling;
+            p.innerHTML = show(obj);
+            p.className ="tip";
+        }
+        //失去焦点时验证
+        obj.onblur = function(){
+            signal = checkFormat(obj,obj.nextElementSibling);
+        }
+    }
+    function show(obj){
+        switch(obj.id){
+            case "name": return "必填，长度为4-16个字符";
+            case "password1": return "密码长度长于6,要包含数字和字母(包括大写和小写)和特殊字符";
+            case "password2": return "再次输入相同密码";
+            default: return ""
+        }
+    }
+    function checkFormat(obj,objsibling) {
+        var signal = 0;
+        obj.value = obj.value.replace(trimReg, '');
+        switch (obj.id) {
+            case "name":
+                if (lenReg.test(obj.value)) {
+                    obj.className = "rightInput";
+                    objsibling.innerHTML = "名称确认完毕";
+                    objsibling.className = "rightTip";
+                    signal = 1;
+                    break;
+                }
+                else {
+                    obj.className = "wrongInput";
+                    objsibling.innerHTML = "名称不可用,请重新设置名称";
+                    objsibling.className = "wrongTip";
+                    signal = 0;
+                    break;
+                }
+            case "password1":
+                if (passwordReg.test(obj.value)) {
+                    obj.className = "rightInput";
+                    objsibling.innerHTML = "密码可用";
+                    objsibling.className = "rightTip";
+                    signal = 1;
+                    break;
+                }
+                else {
+                    obj.className = "wrongInput";
+                    objsibling.innerHTML = "密码格式错误,请重新设置密码";
+                    objsibling.className = "wrongTip";
+                    signal = 0;
+                    break;
+                }
+            case "password2":
+                if (obj.value === document.getElementById("password1").value) {
+                    obj.className = "rightInput";
+                    objsibling.innerHTML = "密码确认完毕";
+                    objsibling.className = "rightTip";
+                    signal = 1;
+                    break;
+                }
+                else {
+                    obj.className = "wrongInput";
+                    objsibling.innerHTML = "与第一次设置的密码不同，请重新输入";
+                    objsibling.className = "wrongTip";
+                    signal = 0;
+                    break;
+                }
+            case "email":
+                if (emailReg.test(obj.value)) {
+                    obj.className = "rightInput";
+                    objsibling.innerHTML = "邮箱确认完毕";
+                    objsibling.className = "rightTip";
+                    signal = 1;
+                    break;
+                }
+                else {
+                    obj.className = "wrongInput";
+                    objsibling.innerHTML = "邮箱格式错误，请重新输入";
+                    objsibling.className = "wrongTip";
+                    signal = 0;
+                    break;
+                }
+            case "tel":
+                if (telReg.test(obj.value)) {
+                    obj.className = "rightInput";
+                    objsibling.innerHTML = "手机确认完毕";
+                    objsibling.className = "rightTip";
+                    signal = 1;
+                    break;
+                }
+                else {
+                    obj.className = "wrongInput";
+                    objsibling.innerHTML = "手机号码出错，请重新输入"
+                    objsibling.className = "wrongTip";
+                    signal = 0;
+                    break;
+                }
+        }
+        return signal;
+    }
+    submitButton.onclick =  function(){
+        if(signal===1) {
+            alert("提交成功！");
+        }
+        else{
+            alert("提交失败！");
+        }
+    }
+</script>
+</html>

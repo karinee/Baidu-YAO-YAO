@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单联动</title>
+    <style>
+        body{
+            margin: 0px 0px;
+            padding:0px 0px;
+        }
+        #relatedSelect{
+            position:relative;
+            width:600px;
+            height:80px;
+            margin: 50px auto;
+        }
+        #radios{
+            position: relative;
+            width:500px;
+            height:20px;
+            margin: 5px auto;
+        }
+        #radios input{
+            margin-left:105px;
+        }
+        #studentMessage,#workerMessage{
+            position: relative;
+            width:500px;
+            height:30px;
+            margin:auto auto;
+        }
+        #province{
+            position: absolute;
+            width: 100px;
+            height: 30px;
+        }
+        span{
+            display: inline-block;
+            width: 305px;
+            height: 30px;
+        }
+        #workerMessage:before,
+        #studentMessage:before{
+            display: inline-block;
+            width: 100px;
+            text-align: right;
+        }
+        #studentMessage:before{
+            content: "学校";
+        }
+        #workerMessage:before{
+            content: "就业单位";
+        }
+        #workerMessage input{
+            display: inline-block;
+            width: 300px;
+            height: 30px;
+        }
+       .hidden{
+            display: none;
+        }
+        .appear{
+            display:block;
+        }
+        .show{
+            display: inline-block;
+            width:200px;
+            height:30px;
+            margin-left: 103px;
+        }
+    </style>
+</head>
+<body>
+    <div id="relatedSelect">
+        <div id="radios">
+            <input type="radio" name="character" value="student"/>在校生
+            <input type="radio" name="character" value="worker"/>非在校生
+        </div>
+        <div id="studentMessage" class="appear">
+            <span>
+                <select id="province">
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                </select>
+                <select id="0" class="show">
+                    <option>北京大学</option>
+                    <option>清华大学</option>
+                    <option>中国人民大学</option>
+                </select>
+                <select id="1" class="hidden">
+                    <option>复旦大学</option>
+                    <option>上海交通大学</option>
+                </select>
+                <select id="2" class="hidden">
+                    <option>中山大学</option>
+                    <option>华南理工大学</option>
+                    <option>广东外语外贸大学</option>
+                </select>
+            </span>
+        </div>
+        <div id="workerMessage" class="hidden">
+            <span>
+               <input type="text"/>
+            </span>
+        </div>
+    </div>
+</body>
+<script>
+    var inputs = document.getElementsByTagName("input");
+    var student = document.getElementById("studentMessage");
+    var worker = document.getElementById("workerMessage");
+    var province = document.getElementById("province");
+    var bjSchool = document.getElementById("0");
+    var shSchool = document.getElementById("1");
+    var gzSchool = document.getElementById("2");
+
+    inputs[0].onclick = function() {
+        student.className = "appear";
+        worker.className = "hidden";
+    };
+    inputs[1].onclick = function () {
+        worker.className = "appear";
+        student.className = "hidden";
+    };
+    province.onchange = function(){
+        switch(province.selectedIndex){
+            case 0:
+                bjSchool.className  = "show";
+                shSchool.className = "hidden";
+                gzSchool.className = "hidden";
+                break;
+            case 1:
+                shSchool.className  = "show";
+                bjSchool.className = "hidden";
+                gzSchool.className = "hidden";
+                break;
+            case 2:
+                gzSchool.className  = "show";
+                bjSchool.className = "hidden";
+                shSchool.className = "hidden";
+                break;
+        }
+    }
+</script>
+</html>
