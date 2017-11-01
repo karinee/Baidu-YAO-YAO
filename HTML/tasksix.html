@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>浮出层</title>
+    <link rel="stylesheet" href="../CSS/tasksix.css"/>
+</head>
+<body>
+    <div id="scrollFrame">
+        <div class="list">
+            <p>格林分多</p>
+            <button type="button" id="fixCenter">check，浮出层固定居中</button>
+            <p>当浮出层显示时，屏幕滚动时，浮出层始终保持位置固定在屏幕正中，不随屏幕滚动而变化位置。</p>
+        </div>
+        <div class="list">
+            <p>史莱哲林</p>
+            <button type="button" id="forbideScroll">check，禁止页面在有浮出层时滚动</button>
+            <p>禁止页面在有浮出层出现时滚动</p>
+        </div>
+        <div class="list">
+            <p>赫夫帕夫</p>
+            <button type="button" id="changeSize">check，窗口大小可调</button>
+            <p>拖拽边缘来放大缩小浮出窗口</p>
+        </div>
+        <div class="list">
+            <p>拉文克劳</p>
+            <button type="button" id="draggable">check，可拖拉浮出层</button>
+            <p>实现浮出层的拖拽移动浮出窗口位置</p>
+        </div>
+    </div>
+    <div id="drumpOut" class="hidden">
+        <h4>这是一个浮出层</h4>
+        <p>这是一个浮出层</p>
+        <button id="cancel">取消</button>
+        <button id="confirm">确认</button>
+        <i id="pop_t"></i>
+        <i id="pop_b"></i>
+        <i id="pop_l"></i>
+        <i id="pop_r"></i>
+        <i id="pop_t_l"></i>
+        <i id="pop_t_r"></i>
+        <i id="pop_b_l"></i>
+        <i id="pop_b_r"></i>
+    </div>
+<script src="../JS/tasksix.js"></script>
+</body>
+</html>
