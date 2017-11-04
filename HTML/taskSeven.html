@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>排序表格</title>
+</head>
+<style>
+    body{
+        margin: 0px 0px;
+        padding: 0px 0px;
+    }
+    table{
+        border: 2px solid #a9a9a9;
+        width:502px;
+        margin:0px auto;
+        color: #000000;
+        text-align: center;
+        border-collapse: collapse;
+    }
+
+    th{
+        position: relative;
+        border:2px solid #d3d3d3;
+        background-color: #808080;
+        color: #ffffff;
+    }
+    td{
+        border:2px solid #d3d3d3;
+    }
+    span{
+        float:right;position: absolute;
+        top:25%;
+        right: 10px;
+    }
+    .up{
+        display: block;
+        border:5px solid transparent;
+        border-bottom-color: #ffffff;
+        margin-bottom: 8px;
+    }
+    .down{
+        display: block;
+        border:5px solid transparent;
+        border-top-color: #ffffff;
+    }
+    #putMessage{
+        width:1000px;
+        margin:50px auto;
+    }
+    button{
+        float:right;
+        margin-top:-73px;
+        margin-right:180px;
+    }
+</style>
+<body>
+    <table id="maskList">
+        <tr>
+            <th><p>姓名</p></th>
+            <th><p>语文</p><span><i class="up" id="chineseTop"></i><i class="down" id="chineseDown"></i></span></th>
+            <th><p>数学</p><span><i class="up" id="mathTop"></i><i class="down" id="mathDown"></i></span></th>
+            <th><p>英语</p><span><i class="up" id="englishTop"></i><i class="down" id="englishDown"></i></span></th>
+            <th><p>总分</p><span><i class="up" id="sumTop"></i><i class="down" id="sumDown"></i></span></th>
+        </tr>
+    </table>
+    <form id="putMessage" oninput="x.value = parseInt(a.value)+parseInt(b.value)+parseInt(c.value)">
+        姓名：<input type="text"/>
+        语文：<input id="a" type="number"/>
+        数学：<input id="b" type="number"/>
+        英语：<input id="c" type="number"/>
+        总分：<output name="x" for="a b c"></output>
+    </form>
+    <button>添加</button>
+</body>
+<script>
+    var data=[{id:0,name:"哈利",chinese:80,math:90,english:90,sum:260},{id:1,name:"罗恩",chinese:85,math:60,english:90,sum:235},{id:2,name:"赫敏",chinese:90,math:100,english:100,sum:290}];
+    var table = $("maskList");
+    var ups = $$("up");
+    var downs = $$('down');
+    var keys = Object.keys(data[0]);
+    var course = keys.slice(2,);
+
+
+    function $(id){
+        return document.getElementById(id);
+    }
+
+    function $$(className){
+        return document.getElementsByClassName(className);
+    }
+
+    //show出table
+    function showtd(){
+        var num = data.length;
+        for(var i=0;i<num;i++){
+            var newtr = document.createElement("tr");
+            var tds = document.createDocumentFragment();
+            tds.innerHTML = '<td>'+data[i].name+'</td><td>'+data[i].chinese+'</td><td>'+data[i].math+'</td><td>'+data[i].english+'</td><td>'+data[i].sum+'</td>';
+            newtr.innerHTML = tds.innerHTML;
+            table.childNodes[1].appendChild(newtr);
+        }
+    }
+
+    //按属性排序
+    function sortByCourse(property,type){
+        return function(obj1,obj2){
+            var num1 = obj1[property];
+            var num2 = obj2[property];
+            switch(type){
+                //升序
+                case "up":
+                    return num1-num2;
+                    break;
+                //降序
+                case "down":
+                    return num2-num1;
+                    break;
+            }
+        }
+    }
+
+    function range(e,type){
+        data.sort(sortByCourse(e,type));
+        var father = table.childNodes[1];
+        for(var i =0;i<data.length;i++){
+            var td = father.childNodes[i+2].childNodes;
+            for(var j=0;j<keys.length-1;j++){
+                td[j].innerHTML = data[i][keys[j+1]];
+            }
+        }
+    }
+    //添加新项
+    function addTr(item,result,length){
+        var tr = document.createElement("tr");
+        for(var i=0;i<length;i++){
+            var td = document.createElement("td");
+            td.innerHTML = item[i].value;
+            tr.appendChild(td);
+        }
+        var td = document.createElement("td");
+        td.innerHTML = result.value;
+        tr.appendChild(td);
+        table.childNodes[1].appendChild(tr);
+        data.push({id:data.length,name:item[0].value,chinese:item[1].value,math:item[2].value,english:item[3].value,sum:result.value});
+    }
+
+    for(let i=0;i<ups.length;i++){
+        ups[i].onclick = function(){
+            range(course[i],"up");
+        }
+    }
+    for(let i=0;i<downs.length;i++){
+        downs[i].onclick = function(){
+            range(course[i],"down");
+        }
+    }
+
+    showtd();
+
+    var button = document.getElementsByTagName("button")[0];
+    var inputs = document.getElementsByTagName("input");
+    var output = document.getElementsByTagName("output")[0];
+    button.onclick = function() {
+        addTr(inputs,output,inputs.length);
+    }
+
+</script>
+</html>
